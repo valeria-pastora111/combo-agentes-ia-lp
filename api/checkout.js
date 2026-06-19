@@ -53,7 +53,6 @@ export default async function handler(req, res) {
       description: product.name,
       payerName: body.name,
       payerEmail: body.email,
-      payerPhone: body.phone,
       payerCpf: body.cpf,
       orderId
     });

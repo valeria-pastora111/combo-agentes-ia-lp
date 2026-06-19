@@ -1,6 +1,6 @@
 # Combo +50 Agentes IA — Landing Page
 
-LP de vendas do ecossistema HubCRM com checkout PIX via **FreePay**.
+LP de vendas do **Combo Agentes IA** com checkout PIX via **FreePay**.
 
 ## Stack
 

@@ -31,12 +31,6 @@ function formatCpf(value) {
     .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 }
 
-function formatPhone(value) {
-  const d = onlyDigits(value).slice(0, 11);
-  if (d.length <= 10) return d.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').trim();
-  return d.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').trim();
-}
-
 function formatMoney(amount) {
   return amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
@@ -128,10 +122,6 @@ document.getElementById('cpf').addEventListener('input', (e) => {
   e.target.value = formatCpf(e.target.value);
 });
 
-document.getElementById('phone').addEventListener('input', (e) => {
-  e.target.value = formatPhone(e.target.value);
-});
-
 vipBump.addEventListener('change', updateAmounts);
 updateAmounts();
 
@@ -158,7 +148,6 @@ form.addEventListener('submit', async (e) => {
     const payload = {
       name: document.getElementById('name').value.trim(),
       email: document.getElementById('email').value.trim(),
-      phone: document.getElementById('phone').value.trim(),
       cpf: document.getElementById('cpf').value.trim(),
       includeVip: vipBump.checked
     };
