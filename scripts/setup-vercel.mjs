@@ -82,13 +82,13 @@ async function main() {
   let project;
   try {
     project = await api(token, `/v9/projects/${encodeURIComponent(NEW_PROJECT)}${teamId ? `?teamId=${teamId}` : ''}`);
+    console.log('  Projeto existente:', project.id);
   } catch {
     project = await api(token, `/v10/projects${teamId ? `?teamId=${teamId}` : ''}`, {
       method: 'POST',
       body: JSON.stringify({
         name: NEW_PROJECT,
-        framework: null,
-        gitRepository: { type: 'github', repo: GITHUB_REPO }
+        framework: null
       })
     });
     console.log('  Projeto criado:', project.id);
@@ -104,23 +104,7 @@ async function main() {
   await upsertEnv(token, NEW_PROJECT, { key: 'SITE_URL', value: siteUrl, teamId });
   await upsertEnv(token, NEW_PROJECT, { key: 'FREEPAY_POSTBACK_URL', value: postbackUrl, teamId });
 
-  console.log('→ Disparando deploy de produção');
-  await api(token, `/v13/deployments${teamId ? `?teamId=${teamId}` : ''}`, {
-    method: 'POST',
-    body: JSON.stringify({
-      name: NEW_PROJECT,
-      project: NEW_PROJECT,
-      target: 'production',
-      gitSource: {
-        type: 'github',
-        repo: GITHUB_REPO,
-        ref: 'main'
-      }
-    })
-  }).catch(async () => {
-    console.log('  (deploy via git será acionado pelo push — ok)');
-  });
-
+  console.log('→ Disparando deploy de produção (CLI)');
   console.log('\n✅ Setup concluído');
   console.log('   LP:', siteUrl);
   console.log('   Checkout:', `${siteUrl}/checkout`);
