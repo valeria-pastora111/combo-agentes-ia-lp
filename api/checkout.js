@@ -3,6 +3,7 @@ import {
   buildCheckoutResponse,
   isPaymentConfigured
 } from '../lib/pix.js';
+import { notifySale } from '../lib/pushcut.js';
 
 const PRODUCT_BASE = {
   name: 'Combo +50 Agentes IA — Ecossistema Completo',
@@ -55,6 +56,8 @@ export default async function handler(req, res) {
       payerCpf: body.cpf,
       orderId
     });
+
+    notifySale('pending', { amount: product.amount }).catch(() => {});
 
     return res.status(200).json(buildCheckoutResponse(payment, {
       orderId,

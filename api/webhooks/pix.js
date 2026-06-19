@@ -1,4 +1,5 @@
 import { mapPaymentStatus } from '../../lib/pix.js';
+import { notifySale, extractAmountFromWebhook } from '../../lib/pushcut.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,6 +20,11 @@ export default async function handler(req, res) {
       status,
       mappedStatus
     });
+
+    if (mappedStatus === 'paid') {
+      const amount = extractAmountFromWebhook(payload) ?? 97;
+      notifySale('approved', { amount }).catch(() => {});
+    }
 
     return res.status(200).json({
       success: true,
