@@ -43,7 +43,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = req.body || {};
+    let body = req.body;
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch { body = {}; }
+    }
+    body = body || {};
     const includeVip = body.includeVip === true || body.includeVip === 'true';
     const product = includeVip ? PRODUCT_VIP_BUMP : PRODUCT_BASE;
     const orderId = `combo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;

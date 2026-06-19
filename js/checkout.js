@@ -23,6 +23,24 @@ function onlyDigits(v) {
   return String(v || '').replace(/\D/g, '');
 }
 
+function isValidCpf(value) {
+  const cpf = onlyDigits(value);
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+  let sum = 0;
+  for (let i = 0; i < 9; i += 1) sum += Number(cpf[i]) * (10 - i);
+  let check = (sum * 10) % 11;
+  if (check === 10) check = 0;
+  if (check !== Number(cpf[9])) return false;
+
+  sum = 0;
+  for (let i = 0; i < 10; i += 1) sum += Number(cpf[i]) * (11 - i);
+  check = (sum * 10) % 11;
+  if (check === 10) check = 0;
+  return check === Number(cpf[10]);
+}
+
 function formatCpf(value) {
   const d = onlyDigits(value).slice(0, 11);
   return d
@@ -145,10 +163,24 @@ form.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Gerando PIX...';
 
   try {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const cpf = document.getElementById('cpf').value.trim();
+
+    if (name.length < 3) {
+      throw new Error('Informe seu nome completo.');
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new Error('Informe um e-mail válido.');
+    }
+    if (!isValidCpf(cpf)) {
+      throw new Error('CPF inválido. Confira os números digitados.');
+    }
+
     const payload = {
-      name: document.getElementById('name').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      cpf: document.getElementById('cpf').value.trim(),
+      name,
+      email,
+      cpf,
       includeVip: vipBump.checked
     };
 
