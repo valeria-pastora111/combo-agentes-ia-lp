@@ -1,4 +1,4 @@
-import { mapFreepayStatus } from '../../lib/freepay.js';
+import { mapPaymentStatus } from '../../lib/pix.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,13 +12,12 @@ export default async function handler(req, res) {
     const payload = req.body || {};
     const status = payload.Status || payload.status || null;
     const transactionId = String(payload.Id || payload.id || '');
-    const mappedStatus = mapFreepayStatus(status);
+    const mappedStatus = mapPaymentStatus(status);
 
-    console.info('[freepay-webhook]', {
+    console.info('[payment-webhook]', {
       transactionId,
       status,
-      mappedStatus,
-      email: payload.customer?.email || payload.Customer?.Email || null
+      mappedStatus
     });
 
     return res.status(200).json({
@@ -28,7 +27,7 @@ export default async function handler(req, res) {
       status: mappedStatus
     });
   } catch (error) {
-    console.error('[freepay-webhook]', error);
+    console.error('[payment-webhook]', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 }

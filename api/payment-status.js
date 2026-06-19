@@ -1,4 +1,4 @@
-import { fetchFreepayTransaction, isFreepayConfigured } from '../lib/freepay.js';
+import { fetchPixTransaction, isPaymentConfigured } from '../lib/pix.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,12 +13,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'paymentId obrigatório' });
   }
 
-  if (!isFreepayConfigured()) {
-    return res.status(503).json({ error: 'FreePay não configurado.' });
+  if (!isPaymentConfigured()) {
+    return res.status(503).json({ error: 'Pagamento indisponível no momento.' });
   }
 
   try {
-    const result = await fetchFreepayTransaction(paymentId);
+    const result = await fetchPixTransaction(paymentId);
     return res.status(200).json({
       paymentId: result.id,
       status: result.status,

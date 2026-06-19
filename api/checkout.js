@@ -1,8 +1,8 @@
 import {
-  createFreepayPixPayment,
-  buildFreepayCheckoutResponse,
-  isFreepayConfigured
-} from '../lib/freepay.js';
+  createPixPayment,
+  buildCheckoutResponse,
+  isPaymentConfigured
+} from '../lib/pix.js';
 
 const PRODUCT_BASE = {
   name: 'Combo +50 Agentes IA — Ecossistema Completo',
@@ -26,11 +26,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     return res.status(200).json({
-      configured: isFreepayConfigured(),
+      configured: isPaymentConfigured(),
       product: PRODUCT_BASE,
       vipBump: { label: 'Plano VIP Implementação', amount: 47, totalWithBump: PRODUCT_VIP_BUMP.amount },
-      paymentMethod: 'pix',
-      provider: 'freepay'
+      paymentMethod: 'pix'
     });
   }
 
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  if (!isFreepayConfigured()) {
+  if (!isPaymentConfigured()) {
     return res.status(503).json({ error: 'Pagamento PIX indisponível no momento. Tente novamente em instantes.' });
   }
 
@@ -48,7 +47,7 @@ export default async function handler(req, res) {
     const product = includeVip ? PRODUCT_VIP_BUMP : PRODUCT_BASE;
     const orderId = `combo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    const payment = await createFreepayPixPayment({
+    const payment = await createPixPayment({
       amount: product.amount,
       description: product.name,
       payerName: body.name,
@@ -57,7 +56,7 @@ export default async function handler(req, res) {
       orderId
     });
 
-    return res.status(200).json(buildFreepayCheckoutResponse(payment, {
+    return res.status(200).json(buildCheckoutResponse(payment, {
       orderId,
       productName: product.name,
       amount: product.amount

@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 /**
- * Cria projeto na Vercel e copia chaves FreePay do projeto hubcrm.
- * Uso: node scripts/setup-vercel.mjs
+ * Configura variáveis de pagamento PIX na Vercel.
+ * Uso: VERCEL_TOKEN=... SOURCE_PROJECT=... node scripts/setup-vercel.mjs
  */
 import fs from 'fs';
 
-const HUBCRM_ENV_PATH = process.env.HUBCRM_ENV || '/Users/joaovitor/Desktop/hubcrm/.env';
-const NEW_PROJECT = process.env.VERCEL_NEW_PROJECT || 'combo-agentes-ia-lp';
-const GITHUB_REPO = process.env.GITHUB_REPO || 'valeria-pastora111/combo-agentes-ia-lp';
+const ENV_FILE = process.env.ENV_FILE || '.env';
+const PROJECT = process.env.VERCEL_PROJECT || 'combo-agentes-ia-lp';
 
 function parseEnvFile(path) {
   const env = {};
@@ -56,59 +55,54 @@ async function upsertEnv(token, project, { key, value, teamId }) {
   return 'created';
 }
 
+async function readPaymentKeys(token, sourceProject, teamId) {
+  const qs = teamId ? `?teamId=${teamId}` : '';
+  const sourceEnvs = await api(token, `/v9/projects/${encodeURIComponent(sourceProject)}/env${qs}`);
+  const keyNames = ['PAYMENT_PUBLIC_KEY', 'PAYMENT_SECRET_KEY', 'PAYMENT_API_URL'];
+  const values = {};
+
+  for (const key of keyNames) {
+    const row = (sourceEnvs.envs || []).find((e) => e.key === key);
+    if (row) values[key] = await getEnvValue(token, sourceProject, row.id);
+  }
+
+  if (!values.PAYMENT_PUBLIC_KEY || !values.PAYMENT_SECRET_KEY) {
+    throw new Error('Chaves PAYMENT_PUBLIC_KEY / PAYMENT_SECRET_KEY não encontradas no projeto origem.');
+  }
+
+  return values;
+}
+
 async function main() {
-  const hubEnv = parseEnvFile(HUBCRM_ENV_PATH);
-  const token = process.env.VERCEL_TOKEN || hubEnv.VERCEL_TOKEN;
-  const sourceProject = hubEnv.VERCEL_PROJECT_NAME || 'hubcrm';
-  const teamId = hubEnv.VERCEL_TEAM_ID || '';
+  const localEnv = parseEnvFile(ENV_FILE);
+  const token = process.env.VERCEL_TOKEN || localEnv.VERCEL_TOKEN;
+  const teamId = process.env.VERCEL_TEAM_ID || localEnv.VERCEL_TEAM_ID || '';
+  const sourceProject = process.env.SOURCE_PROJECT || localEnv.SOURCE_PROJECT || PROJECT;
 
   if (!token) throw new Error('VERCEL_TOKEN não encontrado.');
 
-  console.log('→ Buscando chaves FreePay em', sourceProject);
-  const sourceEnvs = await api(
-    token,
-    `/v9/projects/${encodeURIComponent(sourceProject)}/env${teamId ? `?teamId=${teamId}` : ''}`
-  );
+  console.log('→ Lendo chaves de pagamento em', sourceProject);
+  const values = await readPaymentKeys(token, sourceProject, teamId);
 
-  const freepayKeys = ['FREEPAY_PUBLIC_KEY', 'FREEPAY_SECRET_KEY'];
-  const values = {};
-  for (const key of freepayKeys) {
-    const row = (sourceEnvs.envs || []).find((e) => e.key === key);
-    if (!row) throw new Error(`${key} não encontrada no projeto ${sourceProject}`);
-    values[key] = await getEnvValue(token, sourceProject, row.id);
+  const siteUrl = process.env.SITE_URL || `https://${PROJECT}.vercel.app`;
+  const webhookUrl = `${siteUrl.replace(/\/$/, '')}/api/webhooks/pix`;
+  const apiUrl = values.PAYMENT_API_URL || process.env.PAYMENT_API_URL || localEnv.PAYMENT_API_URL;
+
+  if (!apiUrl) {
+    throw new Error('Defina PAYMENT_API_URL (URL base do gateway).');
   }
 
-  console.log('→ Criando/verificando projeto', NEW_PROJECT);
-  let project;
-  try {
-    project = await api(token, `/v9/projects/${encodeURIComponent(NEW_PROJECT)}${teamId ? `?teamId=${teamId}` : ''}`);
-    console.log('  Projeto existente:', project.id);
-  } catch {
-    project = await api(token, `/v10/projects${teamId ? `?teamId=${teamId}` : ''}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        name: NEW_PROJECT,
-        framework: null
-      })
-    });
-    console.log('  Projeto criado:', project.id);
-  }
+  console.log('→ Configurando variáveis em', PROJECT);
+  await upsertEnv(token, PROJECT, { key: 'PAYMENT_PUBLIC_KEY', value: values.PAYMENT_PUBLIC_KEY, teamId });
+  await upsertEnv(token, PROJECT, { key: 'PAYMENT_SECRET_KEY', value: values.PAYMENT_SECRET_KEY, teamId });
+  await upsertEnv(token, PROJECT, { key: 'PAYMENT_API_URL', value: apiUrl, teamId });
+  await upsertEnv(token, PROJECT, { key: 'SITE_URL', value: siteUrl, teamId });
+  await upsertEnv(token, PROJECT, { key: 'PAYMENT_WEBHOOK_URL', value: webhookUrl, teamId });
 
-  const deploymentUrl = `https://${NEW_PROJECT}.vercel.app`;
-  const siteUrl = deploymentUrl;
-  const postbackUrl = `${siteUrl}/api/webhooks/freepay`;
-
-  console.log('→ Configurando variáveis em', NEW_PROJECT);
-  await upsertEnv(token, NEW_PROJECT, { key: 'FREEPAY_PUBLIC_KEY', value: values.FREEPAY_PUBLIC_KEY, teamId });
-  await upsertEnv(token, NEW_PROJECT, { key: 'FREEPAY_SECRET_KEY', value: values.FREEPAY_SECRET_KEY, teamId });
-  await upsertEnv(token, NEW_PROJECT, { key: 'SITE_URL', value: siteUrl, teamId });
-  await upsertEnv(token, NEW_PROJECT, { key: 'FREEPAY_POSTBACK_URL', value: postbackUrl, teamId });
-
-  console.log('→ Disparando deploy de produção (CLI)');
   console.log('\n✅ Setup concluído');
   console.log('   LP:', siteUrl);
   console.log('   Checkout:', `${siteUrl}/checkout`);
-  console.log('   Webhook:', postbackUrl);
+  console.log('   Webhook:', webhookUrl);
 }
 
 main().catch((err) => {
