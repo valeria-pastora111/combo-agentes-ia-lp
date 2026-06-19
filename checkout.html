@@ -35,17 +35,64 @@
           <li>7 planos bônus inclusos</li>
           <li>Garantia 7 dias</li>
         </ul>
-        <label class="bump-box">
-          <input type="checkbox" id="vip-bump">
-          <div>
-            <strong>+ Plano VIP Implementação</strong>
-            <span>Mentoria 30 min + revisão da 1ª campanha + 20 agentes do seu nicho</span>
-            <em>+ R$ 47</em>
+        <div class="upsell-block">
+          <div class="upsell-head">
+            <strong>🔥 Turbine seu combo agora</strong>
+            <span>Ofertas exclusivas só nesta página — marque quantas quiser</span>
           </div>
-        </label>
+
+          <label class="upsell-card upsell-card--hot">
+            <input type="checkbox" data-upsell="scripts_wa">
+            <div class="upsell-body">
+              <div class="upsell-top">
+                <span class="upsell-emoji">💬</span>
+                <div>
+                  <strong>Scripts WhatsApp Turbo</strong>
+                  <span class="upsell-tag">Mais vendido</span>
+                </div>
+                <em>+ R$ 9,90</em>
+              </div>
+              <p>15 roteiros copy-paste para abordar, quebrar objeções e fechar no WhatsApp hoje.</p>
+            </div>
+          </label>
+
+          <label class="upsell-card">
+            <input type="checkbox" data-upsell="ads_pack">
+            <div class="upsell-body">
+              <div class="upsell-top">
+                <span class="upsell-emoji">📢</span>
+                <div>
+                  <strong>Pack Anúncios Que Convertem</strong>
+                  <span class="upsell-tag upsell-tag--blue">Alta conversão</span>
+                </div>
+                <em>+ R$ 14,90</em>
+              </div>
+              <p>10 criativos Meta + 5 Google Ads prontos — só trocar logo e colocar no ar.</p>
+            </div>
+          </label>
+
+          <label class="upsell-card upsell-card--gold">
+            <input type="checkbox" data-upsell="kit_24h">
+            <div class="upsell-body">
+              <div class="upsell-top">
+                <span class="upsell-emoji">⚡</span>
+                <div>
+                  <strong>Kit Implementação 24h</strong>
+                  <span class="upsell-tag upsell-tag--gold">Resultado rápido</span>
+                </div>
+                <em>+ R$ 19,90</em>
+              </div>
+              <p>Checklist passo a passo + 20 agentes ajustáveis pro seu nicho. Primeira venda em 24h.</p>
+            </div>
+          </label>
+        </div>
+
         <div class="summary-total">
-          <span>Total hoje</span>
-          <strong id="summary-amount">R$ 97,00</strong>
+          <div>
+            <span>Total hoje</span>
+            <p class="summary-breakdown" id="summary-breakdown">Combo base · pagamento único</p>
+          </div>
+          <strong id="summary-amount">R$ 47,00</strong>
         </div>
       </aside>
 
@@ -70,7 +117,7 @@
             </div>
             <button type="submit" class="btn-primary" id="submit-btn">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-              Gerar PIX · <span id="btn-amount">R$ 97</span>
+              Gerar PIX · <span id="btn-amount">R$ 47</span>
             </button>
           </form>
         </div>

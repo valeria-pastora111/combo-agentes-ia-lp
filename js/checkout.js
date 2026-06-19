@@ -1,12 +1,18 @@
-const BASE_AMOUNT = 97;
-const VIP_AMOUNT = 47;
+const BASE_AMOUNT = 47;
+
+const UPSELLS = {
+  scripts_wa: { amount: 9.9, label: 'Scripts WhatsApp Turbo' },
+  ads_pack: { amount: 14.9, label: 'Pack Anúncios Que Convertem' },
+  kit_24h: { amount: 19.9, label: 'Kit Implementação 24h' }
+};
 
 const form = document.getElementById('checkout-form');
 const stepForm = document.getElementById('step-form');
 const stepPix = document.getElementById('step-pix');
 const alertEl = document.getElementById('alert');
-const vipBump = document.getElementById('vip-bump');
+const upsellInputs = document.querySelectorAll('[data-upsell]');
 const summaryAmount = document.getElementById('summary-amount');
+const summaryBreakdown = document.getElementById('summary-breakdown');
 const btnAmount = document.getElementById('btn-amount');
 const submitBtn = document.getElementById('submit-btn');
 const pixQr = document.getElementById('pix-qr');
@@ -53,14 +59,33 @@ function formatMoney(amount) {
   return amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+function getSelectedUpsells() {
+  return [...upsellInputs]
+    .filter((input) => input.checked)
+    .map((input) => input.dataset.upsell);
+}
+
 function getTotal() {
-  return BASE_AMOUNT + (vipBump.checked ? VIP_AMOUNT : 0);
+  const upsellTotal = getSelectedUpsells().reduce((sum, id) => sum + (UPSELLS[id]?.amount || 0), 0);
+  return Math.round((BASE_AMOUNT + upsellTotal) * 100) / 100;
 }
 
 function updateAmounts() {
   const total = getTotal();
+  const selected = getSelectedUpsells();
+
   summaryAmount.textContent = formatMoney(total);
   btnAmount.textContent = formatMoney(total);
+
+  if (!summaryBreakdown) return;
+
+  if (!selected.length) {
+    summaryBreakdown.textContent = 'Combo base · pagamento único';
+    return;
+  }
+
+  const lines = selected.map((id) => `+ ${UPSELLS[id].label}`);
+  summaryBreakdown.textContent = `Combo + ${lines.join(' + ')}`;
 }
 
 function showAlert(message, ok = false) {
@@ -140,7 +165,7 @@ document.getElementById('cpf').addEventListener('input', (e) => {
   e.target.value = formatCpf(e.target.value);
 });
 
-vipBump.addEventListener('change', updateAmounts);
+upsellInputs.forEach((input) => input.addEventListener('change', updateAmounts));
 updateAmounts();
 
 copyBtn.addEventListener('click', async () => {
@@ -181,7 +206,7 @@ form.addEventListener('submit', async (e) => {
       name,
       email,
       cpf,
-      includeVip: vipBump.checked
+      upsells: getSelectedUpsells()
     };
 
     const res = await fetch('/api/checkout', {

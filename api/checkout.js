@@ -4,16 +4,7 @@ import {
   isPaymentConfigured
 } from '../lib/pix.js';
 import { notifySale } from '../lib/pushcut.js';
-
-const PRODUCT_BASE = {
-  name: 'Combo +50 Agentes IA — Ecossistema Completo',
-  amount: 97
-};
-
-const PRODUCT_VIP_BUMP = {
-  name: 'Combo +50 Agentes IA + Plano VIP Implementação',
-  amount: 144
-};
+import { buildOrderProduct, getCatalog } from '../lib/products.js';
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -26,10 +17,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
+    const catalog = getCatalog();
     return res.status(200).json({
       configured: isPaymentConfigured(),
-      product: PRODUCT_BASE,
-      vipBump: { label: 'Plano VIP Implementação', amount: 47, totalWithBump: PRODUCT_VIP_BUMP.amount },
+      product: catalog.base,
+      upsells: catalog.upsells,
       paymentMethod: 'pix'
     });
   }
@@ -48,8 +40,8 @@ export default async function handler(req, res) {
       try { body = JSON.parse(body); } catch { body = {}; }
     }
     body = body || {};
-    const includeVip = body.includeVip === true || body.includeVip === 'true';
-    const product = includeVip ? PRODUCT_VIP_BUMP : PRODUCT_BASE;
+
+    const product = buildOrderProduct(body.upsells);
     const orderId = `combo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
     const payment = await createPixPayment({
@@ -66,7 +58,8 @@ export default async function handler(req, res) {
     return res.status(200).json(buildCheckoutResponse(payment, {
       orderId,
       productName: product.name,
-      amount: product.amount
+      amount: product.amount,
+      upsells: product.upsellIds
     }));
   } catch (error) {
     const status = error.status || 500;

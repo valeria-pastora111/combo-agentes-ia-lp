@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     });
 
     if (mappedStatus === 'paid') {
-      const amount = extractAmountFromWebhook(payload) ?? 97;
+      const amount = extractAmountFromWebhook(payload) ?? 47;
       notifySale('approved', { amount }).catch(() => {});
     }
 
