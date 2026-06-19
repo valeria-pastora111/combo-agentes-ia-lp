@@ -1,0 +1,8 @@
+{
+  "name": "combo-agentes-ia-lp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup:vercel": "node scripts/setup-vercel.mjs"
+  }
+}

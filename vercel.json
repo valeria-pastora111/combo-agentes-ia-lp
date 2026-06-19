@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "framework": null,
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/checkout", "destination": "/checkout.html" },
+    { "source": "/obrigado", "destination": "/obrigado.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "X-Content-Type-Options", "value": "nosniff" }]
+    }
+  ]
+}
