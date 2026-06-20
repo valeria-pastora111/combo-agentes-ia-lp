@@ -1,5 +1,11 @@
 import { mapPaymentStatus } from '../../lib/pix.js';
-import { notifySale, extractAmountFromWebhook } from '../../lib/pushcut.js';
+import {
+  notifySale,
+  extractAmountFromWebhook,
+  extractPaymentIdFromWebhook,
+  extractStatusFromWebhook,
+  unwrapWebhookPayload
+} from '../../lib/pushcut.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -10,20 +16,22 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido' });
 
   try {
-    const payload = req.body || {};
-    const status = payload.Status || payload.status || null;
-    const transactionId = String(payload.Id || payload.id || '');
+    const rawBody = req.body || {};
+    const payload = unwrapWebhookPayload(rawBody);
+    const status = extractStatusFromWebhook(rawBody);
+    const transactionId = extractPaymentIdFromWebhook(rawBody) || '';
     const mappedStatus = mapPaymentStatus(status);
 
     console.info('[payment-webhook]', {
       transactionId,
       status,
-      mappedStatus
+      mappedStatus,
+      keys: Object.keys(payload).slice(0, 12)
     });
 
     if (mappedStatus === 'paid') {
-      const amount = extractAmountFromWebhook(payload) ?? 47;
-      notifySale('approved', { amount }).catch(() => {});
+      const amount = extractAmountFromWebhook(rawBody) ?? 47;
+      await notifySale('approved', { amount, paymentId: transactionId });
     }
 
     return res.status(200).json({

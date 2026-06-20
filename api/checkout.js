@@ -53,7 +53,13 @@ export default async function handler(req, res) {
       orderId
     });
 
-    notifySale('pending', { amount: product.amount }).catch(() => {});
+    const pushcut = await notifySale('pending', {
+      amount: product.amount,
+      paymentId: payment.id
+    });
+    if (!pushcut.ok && !pushcut.skipped) {
+      console.warn('[checkout] pushcut pending falhou', pushcut);
+    }
 
     return res.status(200).json(buildCheckoutResponse(payment, {
       orderId,

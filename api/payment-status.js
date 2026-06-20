@@ -1,4 +1,18 @@
 import { fetchPixTransaction, isPaymentConfigured } from '../lib/pix.js';
+import { notifySale } from '../lib/pushcut.js';
+
+function extractAmountFromTransaction(raw) {
+  const amount =
+    raw?.amount ??
+    raw?.Amount ??
+    raw?.items?.[0]?.amount ??
+    raw?.items?.[0]?.unit_price ??
+    null;
+  if (amount == null) return null;
+  const num = Number(amount);
+  if (!Number.isFinite(num)) return null;
+  return num >= 100 ? num / 100 : num;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,11 +33,18 @@ export default async function handler(req, res) {
 
   try {
     const result = await fetchPixTransaction(paymentId);
+    const paymentConfirmed = result.mappedStatus === 'paid';
+
+    if (paymentConfirmed) {
+      const amount = extractAmountFromTransaction(result.raw) ?? 47;
+      await notifySale('approved', { amount, paymentId: result.id });
+    }
+
     return res.status(200).json({
       paymentId: result.id,
       status: result.status,
       mappedStatus: result.mappedStatus,
-      paymentConfirmed: result.mappedStatus === 'paid'
+      paymentConfirmed
     });
   } catch (error) {
     const status = error.status || 500;
