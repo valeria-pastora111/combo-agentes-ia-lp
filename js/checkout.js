@@ -84,7 +84,7 @@ function updateAmounts() {
   if (!summaryBreakdown) return;
 
   if (!selected.length) {
-    summaryBreakdown.textContent = 'Combo base · pagamento único';
+    summaryBreakdown.textContent = 'Combo base · acesso anual';
     return;
   }
 
