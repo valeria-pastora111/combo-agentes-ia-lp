@@ -325,10 +325,6 @@ body.lp-pro .sticky-cta {
 }
 body.lp-pro .sticky-cta .cta { animation: none; }
 
-@media (min-width: 768px) {
-  body.lp-pro .hero-sub { margin-left: 0; margin-right: auto; }
-}
-
 @media (min-width: 1024px) {
   body.lp-pro .bento-card { padding: 24px 20px; }
   body.lp-pro .bento-title { font-size: 1.0625rem; }
@@ -386,3 +382,8 @@ body.lp-pro .offer-stack {
   border-radius: var(--radius-md);
 }
 body.lp-pro .sec-block { padding: var(--section-y) 0; }
+
+body.lp-pro .offer-stack-list li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}

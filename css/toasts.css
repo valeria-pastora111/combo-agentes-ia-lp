@@ -1,0 +1,110 @@
+/* Notificações estilo iPhone */
+.toast-stack {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 250;
+  width: min(calc(100% - 24px), 380px);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(28, 28, 30, 0.88);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 0.5px rgba(255, 255, 255, 0.08) inset;
+  animation: toast-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.toast.toast-out {
+  animation: toast-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.toast-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.toast-icon--purchase {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.toast-icon--community {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.toast-app {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.toast-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.toast-time {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-80%) scale(0.96);
+  }
+}

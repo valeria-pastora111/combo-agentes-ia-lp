@@ -16,7 +16,7 @@
   --radius-md: 16px;
   --radius-lg: 20px;
   --shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 48px rgba(0,0,0,0.35);
-  --wrap: 1080px;
+  --wrap: 1140px;
 }
 
 html {
@@ -199,13 +199,7 @@ h1, h2, h3 {
   pointer-events: none;
 }
 .upsell-body { display: block; }
-.upsell-top {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 12px;
-  align-items: start;
-  margin-bottom: 8px;
-}
+
 .upsell-icon {
   width: 36px;
   height: 36px;
@@ -254,11 +248,13 @@ h1, h2, h3 {
   color: var(--accent);
   white-space: nowrap;
 }
+.upsell-top {
+  margin-bottom: 8px;
+}
 .upsell-card p {
   font-size: 13px;
   color: var(--text-muted);
   line-height: 1.6;
-  padding-left: 48px;
 }
 
 /* Total */
@@ -498,102 +494,6 @@ h1, h2, h3 {
   white-space: nowrap;
 }
 
-/* iPhone-style toasts */
-.toast-stack {
-  position: fixed;
-  top: calc(12px + env(safe-area-inset-top, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 200;
-  width: min(calc(100% - 24px), 380px);
-  pointer-events: none;
-}
-.toast {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 18px;
-  background: rgba(28, 28, 30, 0.82);
-  backdrop-filter: blur(24px) saturate(1.8);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.45),
-    0 0 0 0.5px rgba(255, 255, 255, 0.08) inset;
-  animation: toast-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.toast.toast-out {
-  animation: toast-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
-}
-.toast-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 16px;
-}
-.toast-icon--purchase {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-}
-.toast-icon--community {
-  background: rgba(99, 102, 241, 0.2);
-  color: #a5b4fc;
-}
-.toast-body { flex: 1; min-width: 0; }
-.toast-app {
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.55);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 2px;
-}
-.toast-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-.toast-sub {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1.4;
-  margin-top: 2px;
-}
-.toast-time {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-@keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(-120%) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-@keyframes toast-out {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-80%) scale(0.96);
-  }
-}
-
 /* Success page */
 .success-page {
   display: flex;
@@ -662,8 +562,6 @@ h1, h2, h3 {
 @media (min-width: 900px) {
   .checkout-grid { grid-template-columns: 1fr 1.05fr; gap: 32px; }
   .checkout-main { padding: 48px 0 40px; }
-  .checkout-sticky-bar-inner { padding: 0 4px; }
-  .btn-sticky { max-width: 360px; margin-left: auto; }
 }
 
 @media (max-width: 767px) {
@@ -672,9 +570,6 @@ h1, h2, h3 {
   .checkout-main { padding: 28px 0 24px; }
   .checkout-summary, .checkout-panel { padding: 22px 18px; }
   .checkout-input { font-size: 16px; padding: 16px; }
-  .upsell-top { grid-template-columns: auto 1fr; }
-  .upsell-top em { grid-column: 1 / -1; justify-self: flex-start; margin-top: 4px; }
-  .upsell-card p { padding-left: 0; }
   .copy-row { flex-direction: column; }
   .copy-row .btn-outline { width: 100%; }
   .sticky-total { display: none; }

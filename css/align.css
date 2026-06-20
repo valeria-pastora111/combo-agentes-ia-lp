@@ -1,0 +1,319 @@
+/* —— Alinhamento global LP + Checkout —— */
+
+/* LP */
+body.lp-pro .wrap {
+  max-width: 1140px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+body.lp-pro .sec-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body.lp-pro .sec-sub {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+body.lp-pro .hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body.lp-pro .hero-sub {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+body.lp-pro .hero-badges,
+body.lp-pro .platforms,
+body.lp-pro .trust-icons {
+  justify-content: center;
+}
+
+body.lp-pro .cta-box {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+body.lp-pro .bento-grid {
+  align-items: stretch;
+}
+
+body.lp-pro .bento-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body.lp-pro .bento-visual {
+  margin-top: auto;
+}
+
+body.lp-pro .offer-sec .wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body.lp-pro .offer-card {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
+}
+
+body.lp-pro .offer-stack-list {
+  text-align: left;
+}
+
+body.lp-pro .offer-stack-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+body.lp-pro .offer-stack-list li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+body.lp-pro .offer-bump {
+  text-align: left;
+}
+
+body.lp-pro .bundle-card {
+  text-align: center;
+}
+
+body.lp-pro .bundle-stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+body.lp-pro .sp-cta-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+body.lp-pro .sp-stats {
+  align-items: stretch;
+}
+
+body.lp-pro .testimonial-grid,
+body.lp-pro .case-grid,
+body.lp-pro .aud-grid,
+body.lp-pro .value-grid,
+body.lp-pro .plans-grid {
+  align-items: stretch;
+}
+
+body.lp-pro .t-card,
+body.lp-pro .case-card,
+body.lp-pro .v-card,
+body.lp-pro .aud-item {
+  height: 100%;
+}
+
+body.lp-pro .steps {
+  align-items: stretch;
+}
+
+body.lp-pro .step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+body.lp-pro .final .cta-box {
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.lp-pro .sticky-cta {
+  display: flex;
+  justify-content: center;
+}
+
+body.lp-pro .sticky-cta .cta {
+  max-width: 1140px;
+  width: calc(100% - 32px);
+  margin: 0 auto;
+}
+
+body.lp-pro footer .wrap {
+  text-align: center;
+}
+
+body.lp-pro .guar-wrap {
+  align-items: center;
+}
+
+body.lp-pro .compare-wrap,
+body.lp-pro .plans-compare {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  body.lp-pro .wrap {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  body.lp-pro .hero-content {
+    align-items: flex-start;
+  }
+
+  body.lp-pro .hero-sub {
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left;
+  }
+
+  body.lp-pro .hero-badges,
+  body.lp-pro .platforms,
+  body.lp-pro .trust-icons {
+    justify-content: flex-start;
+  }
+
+  body.lp-pro .cta-box {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  body.lp-pro .guar-wrap {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  body.lp-pro .wrap {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+/* Checkout */
+.checkout-header .wrap {
+  align-items: center;
+}
+
+.checkout-grid {
+  align-items: stretch;
+}
+
+.checkout-summary,
+.checkout-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-summary .summary-total {
+  margin-top: auto;
+}
+
+.checkout-sticky-bar-inner {
+  width: 100%;
+  max-width: 1140px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.upsell-top {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.upsell-icon {
+  flex-shrink: 0;
+}
+
+.upsell-top > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.upsell-top em {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding-top: 2px;
+}
+
+.upsell-card p {
+  padding-left: 48px;
+  margin-top: 0;
+}
+
+.summary-total {
+  align-items: center;
+}
+
+.summary-total strong {
+  text-align: right;
+  line-height: 1.1;
+}
+
+.checkout-panel h2,
+.checkout-panel .panel-sub {
+  text-align: left;
+}
+
+#step-pix {
+  text-align: left;
+}
+
+.pix-status {
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .checkout-sticky-bar-inner {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .checkout-sticky-bar-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .sticky-total {
+    justify-self: start;
+  }
+
+  .btn-sticky {
+    justify-self: end;
+    width: auto;
+    min-width: 280px;
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 767px) {
+  .checkout-sticky-bar-inner {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .upsell-card p {
+    padding-left: 48px;
+  }
+}
