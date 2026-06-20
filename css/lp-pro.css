@@ -46,32 +46,6 @@ body.lp-pro .wave { display: none; }
 body.lp-pro .top-banner::before,
 body.lp-pro .top-banner::after { display: none; }
 
-/* Nav */
-body.lp-pro .site-nav {
-  position: sticky; top: 0; z-index: 100;
-  border-bottom: 1px solid var(--border);
-  background: rgba(6, 8, 15, 0.82);
-  backdrop-filter: blur(16px) saturate(1.2);
-}
-body.lp-pro .site-nav-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; min-height: 64px;
-}
-body.lp-pro .site-logo {
-  font-size: 0.9375rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text);
-}
-body.lp-pro .site-nav-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 18px; border-radius: 999px; font-size: 0.8125rem; font-weight: 600;
-  color: #fff; background: var(--accent);
-  box-shadow: 0 4px 20px var(--accent-glow);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-body.lp-pro .site-nav-cta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 28px var(--accent-glow);
-}
-
 /* Announcement */
 body.lp-pro .top-banner {
   background: var(--bg-elevated);
